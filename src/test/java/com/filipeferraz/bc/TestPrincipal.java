@@ -54,8 +54,6 @@ public class TestPrincipal {
         KeyPair keyPairServidor = ChavesTool.gerarChaves();
         KeyPair keyPairSubject = ChavesTool.gerarChaves();
 
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-
         X500NameBuilder builderEmissor = new X500NameBuilder(BCStyle.INSTANCE);
         builderEmissor.addRDN(BCStyle.DC, "com");
         builderEmissor.addRDN(BCStyle.DC, "empresa");
@@ -93,8 +91,6 @@ public class TestPrincipal {
 
         KeyPair keyPairSubject = ChavesTool.gerarChaves();
 
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-
         X500NameBuilder builderEmissor = new X500NameBuilder(BCStyle.INSTANCE);
         builderEmissor.addRDN(BCStyle.DC, "com");
         builderEmissor.addRDN(BCStyle.DC, "empresa");
@@ -125,8 +121,6 @@ public class TestPrincipal {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
         KeyPair keyPairSubject = ChavesTool.gerarChaves();
-
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
         X500NameBuilder builderEmissor = new X500NameBuilder(BCStyle.INSTANCE);
         builderEmissor.addRDN(BCStyle.DC, "com");
@@ -159,8 +153,6 @@ public class TestPrincipal {
         KeyPair keyPairServidor = ChavesTool.gerarChaves();
         KeyPair keyPairSubject1 = ChavesTool.gerarChaves();
         KeyPair keyPairSubject2 = ChavesTool.gerarChaves();
-
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
         X500NameBuilder builderEmissor = new X500NameBuilder(BCStyle.INSTANCE);
         builderEmissor.addRDN(BCStyle.DC, "com");
