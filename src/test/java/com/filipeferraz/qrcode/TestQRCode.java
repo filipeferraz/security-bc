@@ -64,7 +64,7 @@ public class TestQRCode {
     }
 
     @Test
-    public void testGerarQRCodeDescriptografado() throws NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException, IOException, NotFoundException {
+    public void testLerQRCodeDescriptografado() throws NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException, IOException, NotFoundException {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
         String textoEntrada = "Texto de teste";
