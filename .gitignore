@@ -1,1 +1,3 @@
-target/ .idea/ security-bc.iml
+target/ 
+.idea/ 
+security-bc.iml
