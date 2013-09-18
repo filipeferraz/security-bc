@@ -33,6 +33,15 @@ public class CriptografiaTool {
         return new BASE64Encoder().encode(cipherText);
     }
 
+    public static String criptografar(PrivateKey privateKey, String texto) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException {
+        byte[] mensagem = texto.getBytes("UTF-8");
+        Cipher cipher = Cipher.getInstance(CRIPTOGRAFIA_PADRAO);
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+        byte[] cipherText = cipher.doFinal(mensagem);
+
+        return new BASE64Encoder().encode(cipherText);
+    }
+
     public static String descriptografar(PrivateKey privateKey, String texto) throws NoSuchPaddingException, NoSuchAlgorithmException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         byte[] mensagem = new BASE64Decoder().decodeBuffer(texto);
         Cipher cipher = Cipher.getInstance(CRIPTOGRAFIA_PADRAO);
@@ -41,5 +50,12 @@ public class CriptografiaTool {
         return new String(cipherData);
     }
 
+    public static String descriptografar(PublicKey publicKey, String texto) throws NoSuchPaddingException, NoSuchAlgorithmException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        byte[] mensagem = new BASE64Decoder().decodeBuffer(texto);
+        Cipher cipher = Cipher.getInstance(CRIPTOGRAFIA_PADRAO);
+        cipher.init(Cipher.DECRYPT_MODE, publicKey);
+        byte[] cipherData = cipher.doFinal(mensagem);
+        return new String(cipherData);
+    }
 
 }

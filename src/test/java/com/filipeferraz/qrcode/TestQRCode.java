@@ -36,16 +36,18 @@ public class TestQRCode {
         File imagem = new File("target/qrcode.png");
         FileOutputStream fos = new FileOutputStream(imagem);
 
-        QRCode.from("http://www.filipeferraz.com").to(ImageType.PNG).withSize(400, 400).writeTo(fos);
+        QRCode.from("Texto de teste").to(ImageType.PNG).withSize(400, 400).writeTo(fos);
 
         Assert.assertTrue(imagem.exists());
+
+        imagem.delete();
     }
 
     @Test
-    public void testGerarQRCodeCriptografado() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, ShortBufferException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
+    public void testGerarQRCodeCriptografadoPrivateKey() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, ShortBufferException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
-        String textoEntrada = "http://www.filipeferraz.com";
+        String textoEntrada = "Texto de teste";
 
         KeyPair keyPairServidor = ChavesTool.gerarChaves();
 
@@ -61,10 +63,63 @@ public class TestQRCode {
 
         String textoDescriptografado = CriptografiaTool.descriptografar(keyPairServidor.getPrivate(), textoCriptografado);
         System.out.println("Texto descriptografado: " + textoDescriptografado);
+
+        imagem.delete();
     }
 
     @Test
-    public void testLerQRCodeDescriptografado() throws NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException, IOException, NotFoundException {
+    public void testGerarQRCodeCriptografadoPublicKey() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, ShortBufferException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
+        String textoEntrada = "Texto de teste";
+
+        KeyPair keyPairServidor = ChavesTool.gerarChaves();
+
+        String textoCriptografado = CriptografiaTool.criptografar(keyPairServidor.getPublic(), textoEntrada);
+        System.out.println("Texto criptografado: " + textoCriptografado);
+
+        File imagem = new File("target/qrcode.png");
+        FileOutputStream fos = new FileOutputStream(imagem);
+
+        QRCode.from(textoCriptografado).to(ImageType.PNG).withSize(400, 400).writeTo(fos);
+
+        Assert.assertTrue(imagem.exists());
+
+        String textoDescriptografado = CriptografiaTool.descriptografar(keyPairServidor.getPrivate(), textoCriptografado);
+        System.out.println("Texto descriptografado: " + textoDescriptografado);
+
+        imagem.delete();
+    }
+
+    @Test
+    public void testLerQRCodeCriptografadoPrivateKey() throws NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException, IOException, NotFoundException {
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
+        String textoEntrada = "Texto de teste";
+
+        KeyPair keyPairServidor = ChavesTool.gerarChaves();
+
+        String textoCriptografado = CriptografiaTool.criptografar(keyPairServidor.getPrivate(), textoEntrada);
+
+        File imagem = new File("target/qrcode.png");
+        FileOutputStream fos = new FileOutputStream(imagem);
+
+        QRCode.from(textoCriptografado).to(ImageType.PNG).withSize(400, 400).writeTo(fos);
+
+        Assert.assertTrue(imagem.exists());
+
+        Result resultado = carregarImagemQRCode(imagem.getAbsolutePath());
+
+        String textoDescriptografado = CriptografiaTool.descriptografar(keyPairServidor.getPublic(), resultado.getText());
+        System.out.println("Texto descriptografado: " + textoDescriptografado);
+
+        Assert.assertEquals(textoEntrada, textoDescriptografado);
+
+        imagem.delete();
+    }
+
+    @Test
+    public void testLerQRCodeCriptografadoPublicKey() throws NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException, IOException, NotFoundException {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
         String textoEntrada = "Texto de teste";
@@ -86,6 +141,8 @@ public class TestQRCode {
         System.out.println("Texto descriptografado: " + textoDescriptografado);
 
         Assert.assertEquals(textoEntrada, textoDescriptografado);
+
+        imagem.delete();
     }
 
     private Result carregarImagemQRCode(String caminho) throws IOException, NotFoundException {
